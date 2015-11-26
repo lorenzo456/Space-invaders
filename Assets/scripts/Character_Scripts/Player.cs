@@ -11,6 +11,7 @@ public class Player : Character {
     {
         base.Start();
         speed = 4;
+		currentWeapon = 0;
     }
 
   
@@ -40,7 +41,6 @@ public class Player : Character {
             playerX = 0;
         }
 
-        //Debug.Log("Z movement = " + playerZ);
         if (Input.GetButton("Horizontal"))
         {
 
@@ -57,10 +57,9 @@ public class Player : Character {
     public override void Shoot()
     {
         base.Shoot();
-        if (Input.GetButtonDown("Fire1"))
-        {
-            Instantiate(weapons[0], transform.position, transform.rotation);
-        }
+        if (Input.GetButtonDown ("Fire1")) {
+			Instantiate (Weapons [currentWeapon], transform.position, transform.rotation);
+		} 
     }
 
     public override void Die()

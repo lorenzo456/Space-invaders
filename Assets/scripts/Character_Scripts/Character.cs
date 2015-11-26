@@ -4,12 +4,13 @@ using System.Collections.Generic;
 
 public class Character : MonoBehaviour {
 
-    public GameObject[] weapons;
+    //public GameObject[] weapons;
+	public List<GameObject>	Weapons = new List<GameObject> ();
 
     public bool isAlive;
     public int hp;
     public float speed;
-    
+	public int currentWeapon;
 
     public float colDistance = 0.5f;
     public bool colDown = false;
@@ -19,21 +20,31 @@ public class Character : MonoBehaviour {
 
     public virtual void Start()
     {
-        weapons = Resources.LoadAll("Prefab/Weapons") as GameObject[];
-       // GameObject weapon = weapons[0];
-        
-        
-        //Debug.Log(weapon);
+       // weapons = Resources.LoadAll("Prefab/Weapons/") as GameObject[];
+
+		for (int i = 0; i < 5; i++) 
+		{
+			GameObject newWeapon = Resources.Load("Prefab/Weapons/Weapon"+i) as GameObject;
+			if(newWeapon == null)
+			{
+				break;
+			}else
+			{
+				Weapons.Add(newWeapon);
+			}
+		}
 
         this.gameObject.AddComponent<Rigidbody>();
         this.gameObject.GetComponent<Rigidbody>().useGravity = false;
         this.gameObject.GetComponent<Rigidbody>().isKinematic = true;       
     }
 
-
 	public virtual void Move() { }
 
-    public virtual void Shoot(){ }
+    public virtual void Shoot()
+	{
+
+	}
 
     public virtual void Die()
     {
@@ -48,7 +59,7 @@ public class Character : MonoBehaviour {
         if (Physics.Raycast(transform.position, fwd, colDistance))
         {
             colUp = true;
-            Debug.Log("There is something in front of the object!");
+            //Debug.Log("There is something in front of the object!");
 
         }
         else
@@ -60,7 +71,7 @@ public class Character : MonoBehaviour {
         if (Physics.Raycast(transform.position, bwd, colDistance))
         {
             colDown = true;
-            Debug.Log("There is something behind the object!");
+            //Debug.Log("There is something behind the object!");
         }
         else
         {
@@ -72,7 +83,7 @@ public class Character : MonoBehaviour {
         if (Physics.Raycast(transform.position, right, colDistance))
         {
             colRight = true;
-            Debug.Log("There is something to the right of the object!");
+            //Debug.Log("There is something to the right of the object!");
         }
         else
         {
@@ -83,7 +94,7 @@ public class Character : MonoBehaviour {
         if (Physics.Raycast(transform.position, left, colDistance))
         {
             colLeft = true;
-            Debug.Log("There is something to the left of the object!");
+            //Debug.Log("There is something to the left of the object!");
         }
         else
         {
