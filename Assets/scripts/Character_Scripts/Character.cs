@@ -11,6 +11,9 @@ public class Character : MonoBehaviour {
     public int hp;
     public float speed;
 	public int currentWeapon;
+    public float reloadTime;
+    public bool reloaded;
+    public Vector3 bulletSpawn;
 
     public float colDistance = 0.5f;
     public bool colDown = false;
@@ -20,8 +23,6 @@ public class Character : MonoBehaviour {
 
     public virtual void Start()
     {
-       // weapons = Resources.LoadAll("Prefab/Weapons/") as GameObject[];
-
 		for (int i = 0; i < 5; i++) 
 		{
 			GameObject newWeapon = Resources.Load("Prefab/Weapons/Weapon"+i) as GameObject;
@@ -33,34 +34,32 @@ public class Character : MonoBehaviour {
 				Weapons.Add(newWeapon);
 			}
 		}
-
-        this.gameObject.AddComponent<Rigidbody>();
-        this.gameObject.GetComponent<Rigidbody>().useGravity = false;
-        this.gameObject.GetComponent<Rigidbody>().isKinematic = true;       
+        
     }
 
 	public virtual void Move() { }
 
-    public virtual void Shoot()
-	{
+    public virtual void Shoot(){ }
 
-	}
+    public virtual void WeaponSwitch()
+    {
+        
+    }
 
     public virtual void Die()
     {
         isAlive = false;
-        Destroy(this);
+        Destroy(this.gameObject);
     }
  
     public virtual void Collision()
     {
 
         Vector3 fwd = transform.TransformDirection(Vector3.forward);
-        if (Physics.Raycast(transform.position, fwd, colDistance))
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, fwd, out hit, colDistance) && hit.transform.gameObject.tag == "Wall")
         {
             colUp = true;
-            //Debug.Log("There is something in front of the object!");
-
         }
         else
         {
@@ -68,10 +67,9 @@ public class Character : MonoBehaviour {
         }
 
         Vector3 bwd = transform.TransformDirection(-Vector3.forward);
-        if (Physics.Raycast(transform.position, bwd, colDistance))
+        if (Physics.Raycast(transform.position, bwd, out hit, colDistance) && hit.transform.gameObject.tag == "Wall")
         {
             colDown = true;
-            //Debug.Log("There is something behind the object!");
         }
         else
         {
@@ -80,10 +78,9 @@ public class Character : MonoBehaviour {
 
 
         Vector3 right = transform.TransformDirection(Vector3.right);
-        if (Physics.Raycast(transform.position, right, colDistance))
+        if (Physics.Raycast(transform.position, right, out hit, colDistance) && hit.transform.gameObject.tag == "Wall")
         {
             colRight = true;
-            //Debug.Log("There is something to the right of the object!");
         }
         else
         {
@@ -91,10 +88,9 @@ public class Character : MonoBehaviour {
         }
 
         Vector3 left = transform.TransformDirection(-Vector3.right);
-        if (Physics.Raycast(transform.position, left, colDistance))
+        if (Physics.Raycast(transform.position, left, out hit, colDistance) && hit.transform.gameObject.tag == "Wall")
         {
             colLeft = true;
-            //Debug.Log("There is something to the left of the object!");
         }
         else
         {
@@ -109,9 +105,30 @@ public class Character : MonoBehaviour {
 
     }
 
+    public virtual void Reload()
+        {
+        if (reloadTime > 0)
+        {
+            reloaded = false;
+            reloadTime -= Time.deltaTime;
+        }
+        else
+        {
+            reloadTime = 0;
+            reloaded = true;
+        }
+        }
+
     void Update()
     {
         Move();
         Shoot();
+        Reload();
+        WeaponSwitch();
+
+        if ( hp < 0)
+        {
+            Die();
+        }
     }
 }

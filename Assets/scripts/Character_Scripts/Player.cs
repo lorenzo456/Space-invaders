@@ -1,20 +1,35 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Player : Character {
 
     public float playerX;
     public float playerZ;
 
-
     public override void Start()
     {
         base.Start();
         speed = 4;
 		currentWeapon = 0;
+        hp = 3;
     }
 
-  
+    public override void WeaponSwitch()
+    {
+        base.WeaponSwitch();
+        if (Input.GetKeyDown(KeyCode.E) && currentWeapon < Weapons.Count -1)
+        {
+            currentWeapon = currentWeapon + 1;
+        }
+        else if (Input.GetKeyDown(KeyCode.Q) && currentWeapon > 0 )
+        {
+            currentWeapon = currentWeapon - 1;
+        }
+        Debug.Log(currentWeapon);
+
+
+    }
 
     public override void Move()
     {
@@ -57,9 +72,12 @@ public class Player : Character {
     public override void Shoot()
     {
         base.Shoot();
-        if (Input.GetButtonDown ("Fire1")) {
-			Instantiate (Weapons [currentWeapon], transform.position, transform.rotation);
-		} 
+        bulletSpawn = this.gameObject.transform.GetChild(0).GetComponent<Transform>().position;
+
+        if (Input.GetButtonDown ("Jump") && reloaded == true) {
+			Instantiate (Weapons [currentWeapon], bulletSpawn, transform.rotation);
+            reloadTime = .2f;
+		}
     }
 
     public override void Die()
