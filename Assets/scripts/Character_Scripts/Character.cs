@@ -21,6 +21,8 @@ public class Character : MonoBehaviour {
     public bool colLeft = false;
     public bool colRight = false;
 
+	public virtual void Awake (){
+	}
     public virtual void Start()
     {
 		for (int i = 0; i < 5; i++) 

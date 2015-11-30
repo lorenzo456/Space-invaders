@@ -3,14 +3,14 @@ using System.Collections;
 
 public class Monster : Character {
 
-    public int direction;
+    public int myDirection;
 
     public override void Start()
     {
         base.Start();
         hp = 3;
         speed = 0.1f;
-        direction = 1;
+        myDirection = 1;
         currentWeapon = 0;
         reloadTime =  Random.Range(1f, 5f);
     }
@@ -32,15 +32,15 @@ public class Monster : Character {
         if (colLeft == true && this.transform.position.x < 0)
         {
             MoveForward();
-            direction *= -1;
+            myDirection *= -1;
         }
         else if (colRight == true && this.transform.position.x > 0)
         {
             MoveForward();
-            direction *= -1;
+            myDirection *= -1;
         }
 
-        this.transform.position += new Vector3(speed, 0, 0) * direction;
+        this.transform.position += new Vector3(speed, 0, 0) * myDirection;
     }
 
     public void MoveForward()

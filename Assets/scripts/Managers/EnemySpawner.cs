@@ -36,9 +36,9 @@ public class EnemySpawner : MonoBehaviour {
     void SpawnEnemies(int enemyNumber)
     {
         enemies = new GameObject[enemyNumber];
-        for(int i = 0; i < enemyNumber; i++)
+        for(int i = 0; i < enemies.Length; i++)
         {
-            GameObject newEnemy = Instantiate(enemyPrefab, new Vector3(2 * i,0, spawnHeight), Quaternion.Euler(180,0,0)) as GameObject;
+            GameObject newEnemy = Instantiate(enemyPrefab, new Vector3(2 * i - 20,0, spawnHeight), Quaternion.Euler(180,0,0)) as GameObject;
             newEnemy.name = "enemy" + i;
 
             enemies[i] = newEnemy;
