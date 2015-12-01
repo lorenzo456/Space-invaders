@@ -68,10 +68,8 @@ public class Player : Character {
         
     }
 
-
     public override void Shoot()
     {
-        base.Shoot();
         bulletSpawn = this.gameObject.transform.GetChild(0).GetComponent<Transform>().position;
 
         if (Input.GetButtonDown ("Jump") && reloaded == true) {

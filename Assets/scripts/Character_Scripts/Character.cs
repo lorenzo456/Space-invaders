@@ -14,6 +14,7 @@ public class Character : MonoBehaviour {
     public float reloadTime;
     public bool reloaded;
     public Vector3 bulletSpawn;
+    public int myDirection;
 
     public float colDistance = 0.5f;
     public bool colDown = false;
@@ -25,6 +26,7 @@ public class Character : MonoBehaviour {
 	}
     public virtual void Start()
     {
+        myDirection = 1;
 		for (int i = 0; i < 5; i++) 
 		{
 			GameObject newWeapon = Resources.Load("Prefab/Weapons/Weapon"+i) as GameObject;
@@ -41,7 +43,15 @@ public class Character : MonoBehaviour {
 
 	public virtual void Move() { }
 
-    public virtual void Shoot(){ }
+    public virtual void Shoot()
+    {
+        bulletSpawn = this.transform.position - new Vector3(0, 0, 2);
+        if (reloaded == true)
+        {
+            Instantiate(Weapons[currentWeapon], bulletSpawn, transform.rotation * new Quaternion(0,0,0,-1));
+            reloadTime = Random.Range(1f, 5f);
+        }
+    }
 
     public virtual void WeaponSwitch()
     {

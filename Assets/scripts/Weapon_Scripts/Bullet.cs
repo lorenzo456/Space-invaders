@@ -39,7 +39,7 @@ public class Bullet : MonoBehaviour {
 
     void checkSide()
     {
-        if(transform.forward == new Vector3(0,0,1))
+        if(transform.rotation == new Quaternion(0,0,0,1))
         {
             enemy = "Enemy";
         }
