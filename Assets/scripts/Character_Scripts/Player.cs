@@ -4,9 +4,6 @@ using System.Collections.Generic;
 
 public class Player : Character {
 
-    public float playerX;
-    public float playerZ;
-
     public override void Start()
     {
         base.Start();
@@ -15,9 +12,8 @@ public class Player : Character {
         hp = 3;
     }
 
-    public override void WeaponSwitch()
+    void WeaponSwitch()
     {
-        base.WeaponSwitch();
         if (Input.GetKeyDown(KeyCode.E) && currentWeapon < Weapons.Count -1)
         {
             currentWeapon = currentWeapon + 1;
@@ -26,8 +22,6 @@ public class Player : Character {
         {
             currentWeapon = currentWeapon - 1;
         }
-        Debug.Log(currentWeapon);
-
 
     }
 
@@ -78,9 +72,9 @@ public class Player : Character {
 		}
     }
 
-    public override void Die()
+    public override void Update()
     {
-        base.Die();
+        base.Update();
+        WeaponSwitch();
     }
-
 }

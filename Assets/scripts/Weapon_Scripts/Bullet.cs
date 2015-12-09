@@ -22,6 +22,7 @@ public class Bullet : MonoBehaviour {
 
         if (spawnTime > 0)
         {
+            Move(speed);
             spawnTime -= Time.deltaTime;
         }
         else
@@ -29,15 +30,16 @@ public class Bullet : MonoBehaviour {
             DestroyBullet();
         }
 
-        Move(speed);
+        
     }
 
     public virtual void DestroyBullet()
     {
         Destroy(this.gameObject);
+        //gameObject.SetActive(false);
     }
 
-    void checkSide()
+    public void checkSide()
     {
         if(transform.rotation == new Quaternion(0,0,0,1))
         {

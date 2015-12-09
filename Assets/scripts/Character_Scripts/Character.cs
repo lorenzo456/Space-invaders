@@ -22,49 +22,31 @@ public class Character : MonoBehaviour {
     public bool colLeft = false;
     public bool colRight = false;
 
-	public virtual void Awake (){
-	}
     public virtual void Start()
     {
+        isAlive = true;
         myDirection = 1;
-		for (int i = 0; i < 5; i++) 
-		{
-			GameObject newWeapon = Resources.Load("Prefab/Weapons/Weapon"+i) as GameObject;
-			if(newWeapon == null)
-			{
-				break;
-			}else
-			{
-				Weapons.Add(newWeapon);
-			}
-		}
-        
-    }
-
-	public virtual void Move() { }
-
-    public virtual void Shoot()
-    {
-        bulletSpawn = this.transform.position - new Vector3(0, 0, 2);
-        if (reloaded == true)
+        for (int i = 0; i < 5; i++)
         {
-            Instantiate(Weapons[currentWeapon], bulletSpawn, transform.rotation * new Quaternion(0,0,0,-1));
-            reloadTime = Random.Range(1f, 5f);
+            GameObject newWeapon = Resources.Load("Prefab/Weapons/Weapon" + i) as GameObject;
+            if (newWeapon == null)
+            {
+                break;
+            }
+            else
+            {
+                Weapons.Add(newWeapon);
+            }
         }
     }
 
-    public virtual void WeaponSwitch()
-    {
-        
-    }
-
-    public virtual void Die()
+    public void Die()
     {
         isAlive = false;
-        Destroy(this.gameObject);
+        this.gameObject.SetActive (false);
     }
  
-    public virtual void Collision()
+    public void Collision()
     {
 
         Vector3 fwd = transform.TransformDirection(Vector3.forward);
@@ -110,6 +92,12 @@ public class Character : MonoBehaviour {
         }
 
 
+        if (Physics.Raycast(transform.position, bwd, out hit, colDistance) && hit.transform.gameObject.tag == "DeathZone" || Physics.Raycast(transform.position, fwd, out hit, colDistance) && hit.transform.gameObject.tag == "DeathZone" ||
+            Physics.Raycast(transform.position, right, out hit, colDistance) && hit.transform.gameObject.tag == "DeathZone" || Physics.Raycast(transform.position, left, out hit, colDistance) && hit.transform.gameObject.tag == "DeathZone")
+        {
+            isAlive = false;
+        }
+
         Debug.DrawRay(transform.position, fwd * colDistance);
         Debug.DrawRay(transform.position, bwd * colDistance);
         Debug.DrawRay(transform.position, right * colDistance);
@@ -117,28 +105,42 @@ public class Character : MonoBehaviour {
 
     }
 
-    public virtual void Reload()
+    public void Reload()
         {
-        if (reloadTime > 0)
-        {
-            reloaded = false;
-            reloadTime -= Time.deltaTime;
-        }
-        else
-        {
-            reloadTime = 0;
-            reloaded = true;
-        }
+            if (reloadTime > 0)
+            {
+                reloaded = false;
+                reloadTime -= Time.deltaTime;
+            }
+            else
+            {
+                reloadTime = 0;
+                reloaded = true;
+            }
         }
 
-    void Update()
+    public virtual void Move()
+    {
+        Collision();
+    }
+
+    public virtual void Shoot()
+    {
+        bulletSpawn = this.transform.position - new Vector3(0, 0, 2);
+        if (reloaded == true)
+        {
+            Instantiate(Weapons[currentWeapon], bulletSpawn, transform.rotation * new Quaternion(0, 0, 0, -1));
+            reloadTime = Random.Range(1f, 5f);
+        }
+    }
+
+    public virtual void Update()
     {
         Move();
         Shoot();
         Reload();
-        WeaponSwitch();
 
-        if ( hp < 0)
+        if ( hp < 0 || isAlive == false)
         {
             Die();
         }

@@ -16,8 +16,6 @@ public class Monster : Character {
     {
         base.Move();
 
-        Collision();
-
         if (colLeft || colRight)
         {
             MoveForward();

@@ -10,11 +10,8 @@ public class Bullet_Lazer : Bullet {
         spawnTime = 2;
     }
 
-
     public override void Move(float mySpeed)
     {
-        //base.Move(mySpeed);
-        Debug.Log("The lazer forward position: " + transform.rotation);
         if (enemy == "Enemy")
         {
             
